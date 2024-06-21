@@ -75,7 +75,7 @@ BEGIN
       wait for 20 ns;
       
       -- Setup data and number of bytes
-      num_bytes <= "01";  -- Set to send 3 bytes
+      num_bytes <= "01";  -- Set to send 1 bytes
       data_in <= x"00_00_AA";  -- Data to send
       wait for clk_period*2;
       
@@ -88,7 +88,7 @@ BEGIN
       wait until ready = '1';
       
       -- Send new data to SPI
-      num_bytes <= "10";  -- Set to send 1 bytes
+      num_bytes <= "10";  -- Set to send 2 bytes
       data_in <= x"00_AA_BB";  -- Data to send
       wait for clk_period*2;
       -- Start transmission
@@ -100,7 +100,7 @@ BEGIN
       wait until ready = '1';
       
       -- Send new data to SPI
-      num_bytes <= "11";  -- Set to send 1 bytes
+      num_bytes <= "11";  -- Set to send 3 bytes
       data_in <= x"AA_BB_CC";  -- Data to send
       wait for clk_period*2;
       -- Start transmission

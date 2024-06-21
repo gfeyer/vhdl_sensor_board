@@ -1,4 +1,3 @@
-VHDL sensor board
 # SPI Interface for MCP25625
 
 This project develops an SPI (Serial Peripheral Interface) communication interface for the MCP25625, a CAN controller with integrated CAN transceiver. The primary goal is to facilitate data communication between a microcontroller and the MCP25625 using VHDL.

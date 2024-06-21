@@ -82,7 +82,6 @@ begin
         next_state <= state;  -- Default state hold
         case state is
             when idle =>
---                ready <= '1';
                 if start = '1' then
                     data_buffer <= data_in;  -- Load the input data
                     byte_count <= to_integer(unsigned(num_bytes));
@@ -91,12 +90,10 @@ begin
                 end if;
 
             when pre_send =>
---                ready <= '0';
                 next_state <= send_data;
 
             when send_data =>
                 if sck = '0' and sck_last = '1' then  -- Check for falling edge of sck
---                    ss <= '0';  -- Select slave
                     mosi <= data_buffer(bit_index + 8 * (byte_count - 1));  -- Send MSB first
                     if bit_index = 0 then
                         bit_index <= 7;  -- Reset bit index
@@ -115,8 +112,6 @@ begin
                 next_state <= done;
                 
             when done =>
---                ss <= '1';  -- Deselect slave
---                ready <= '1';
                 next_state <= idle;  -- Return to idle
         end case;
     end process;

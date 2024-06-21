@@ -88,8 +88,8 @@ BEGIN
       wait until ready = '1';
       
 --      -- Send new data to SPI
-      num_bytes <= "01";  -- Set to send 3 bytes
-      data_in <= x"AA_00_00";  -- Data to send
+      num_bytes <= "01";  -- Set to send 1 bytes
+      data_in <= x"00_00_AA";  -- Data to send
       wait for clk_period*2;
       -- Start transmission
       start <= '1';

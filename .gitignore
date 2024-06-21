@@ -2,3 +2,11 @@
 WKSensors.xpr
 WKSensors.cache/wt/project.wpc
 WKSensors.hw/WKSensors.lpr
+*.behav
+*.wdf
+*.log
+*.wbd
+*.bat
+WKSensors.cache/
+WKSensors.sim/
+WKSensors.ip_user_files

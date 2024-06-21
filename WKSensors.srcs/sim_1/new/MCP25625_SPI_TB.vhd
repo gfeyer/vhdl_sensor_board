@@ -85,8 +85,19 @@ BEGIN
       start <= '0';
 
       -- Wait for transmission to complete
-      wait for 800 ns;
-
+      wait until ready = '1';
+      
+--      -- Send new data to SPI
+      num_bytes <= "01";  -- Set to send 3 bytes
+      data_in <= x"AA_00_00";  -- Data to send
+      wait for clk_period*2;
+      -- Start transmission
+      start <= '1';
+      wait for clk_period;
+      start <= '0';
+      
+      -- Wait for transmission to complete
+      wait until ready = '1';
 
       -- End simulation
       wait;

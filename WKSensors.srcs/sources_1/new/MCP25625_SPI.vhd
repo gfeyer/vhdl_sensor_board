@@ -29,12 +29,19 @@ begin
     sck_process: process(clk, reset)
     begin
         if reset = '1' then
-            sck <= '1';  -- Assume sck idles high
-            sck_last <= '1';
+            sck <= '0';  -- Assume sck idles high
+            sck_last <= '0';
         elsif rising_edge(clk) then
-            if state /= idle then
+        
+            if state = pre_send then
+                sck_last <= '1'; -- needed to trigger writing the bit on the line
+                
+            elsif state /= idle then
                 sck_last <= sck;  -- Update last sck state
                 sck <= not sck;  -- Toggle sck every clock cycle
+            else 
+                sck_last <= '0';
+                sck <= '0';
             end if;
         end if;
     end process;
@@ -45,7 +52,7 @@ begin
         if reset = '1' then
             state <= idle;
             ss <= '1';  -- Deselect slave on reset
-            ready <= '1';  -- Indicate ready on reset
+            ready <= '0';  -- Indicate ready on reset
         elsif rising_edge(clk) then
             state <= next_state;  -- Transition states
             -- Ensure ss and ready are correctly managed
@@ -75,7 +82,7 @@ begin
         next_state <= state;  -- Default state hold
         case state is
             when idle =>
-                ready <= '1';
+--                ready <= '1';
                 if start = '1' then
                     data_buffer <= data_in;  -- Load the input data
                     byte_count <= to_integer(unsigned(num_bytes));
@@ -84,12 +91,12 @@ begin
                 end if;
 
             when pre_send =>
-                ready <= '0';
+--                ready <= '0';
                 next_state <= send_data;
 
             when send_data =>
                 if sck = '0' and sck_last = '1' then  -- Check for falling edge of sck
-                    ss <= '0';  -- Select slave
+--                    ss <= '0';  -- Select slave
                     mosi <= data_buffer(bit_index + 8 * (byte_count - 1));  -- Send MSB first
                     if bit_index = 0 then
                         bit_index <= 7;  -- Reset bit index
@@ -108,8 +115,8 @@ begin
                 next_state <= done;
                 
             when done =>
-                ss <= '1';  -- Deselect slave
-                ready <= '1';
+--                ss <= '1';  -- Deselect slave
+--                ready <= '1';
                 next_state <= idle;  -- Return to idle
         end case;
     end process;
